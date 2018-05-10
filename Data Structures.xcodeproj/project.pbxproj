@@ -28,6 +28,8 @@
 		68CBAEBA20A499430050883E /* tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
 		68CBAEBB20A4995F0050883E /* node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node.h; sourceTree = "<group>"; };
 		68CBAEBC20A4C9B90050883E /* orderedTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = orderedTree.h; sourceTree = "<group>"; };
+		68CBAEBD20A501000050883E /* avlnode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = avlnode.h; sourceTree = "<group>"; };
+		68CBAEBE20A508570050883E /* AVLTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AVLTree.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,8 @@
 				68CBAEBA20A499430050883E /* tree.h */,
 				68CBAEBB20A4995F0050883E /* node.h */,
 				68CBAEBC20A4C9B90050883E /* orderedTree.h */,
+				68CBAEBD20A501000050883E /* avlnode.h */,
+				68CBAEBE20A508570050883E /* AVLTree.h */,
 			);
 			path = trees;
 			sourceTree = "<group>";

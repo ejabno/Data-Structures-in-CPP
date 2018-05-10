@@ -36,6 +36,10 @@ void OrderedBinaryTree<E>::insert(E item) {
         }
     }
     
+    if (this->contains(item)) {
+        throw "Can't have duplicates in the tree\n";
+    }
+    
     Node<E> *newNode = new Node<E>(item);
     if (this->isEmpty()) {
         this->root = newNode;
@@ -69,7 +73,76 @@ void OrderedBinaryTree<E>::insert(E item) {
 
 template <typename E>
 void OrderedBinaryTree<E>::remove(E item) {
+    if (this->isEmpty()) {
+        throw "Can't remove from an already empty tree\n";
+    }
+    if (!this->contains(item)) {
+        throw "The item being removed is not in the tree\n";
+    }
+    
+    Node<E> *deleteNode = this->root;
+    Node<E> *parent = NULL;
+    bool deleteRight = false;
+    E compare = deleteNode->getData();
 
+    while (item != compare) {
+        parent = deleteNode;
+        if (item > compare) {
+            deleteNode = deleteNode->getRight();
+            deleteRight = true;
+        }
+        else if (item < compare) {
+            deleteNode = deleteNode->getLeft();
+            deleteRight = false;
+        }
+        compare = deleteNode->getData();
+    }
+    
+    bool deleteRoot;
+    if (parent == NULL) {
+        deleteRoot = true;
+    }
+    else deleteRoot = false;
+
+    switch (deleteNode->getNumChildren()) {
+        case 0:
+            if (deleteRoot) {
+                this->root = NULL;
+            }
+            else {
+                if (deleteRight)
+                    parent->setRight(NULL);
+                else parent->setLeft(NULL);
+            }
+            delete deleteNode;
+            --(this->itemCount);
+            break;
+        case 1:
+            Node<E> *newRoot;
+            if (deleteNode->getLeft() != NULL)
+                newRoot = deleteNode->getLeft();
+            else newRoot = deleteNode->getRight();
+            if (deleteRoot) {
+                this->root = newRoot;
+            }
+            else {
+                if (deleteRight)
+                    parent->setRight(newRoot);
+                else parent->setLeft(newRoot);
+            }
+            delete deleteNode;
+            --(this->itemCount);
+            break;
+        case 2:
+            Node<E> *IOSuccessor = deleteNode->getRight();
+            while (IOSuccessor->getLeft() != NULL) {
+                IOSuccessor = IOSuccessor->getLeft();
+            }
+            E backup = IOSuccessor->getData();
+            remove(backup);
+            deleteNode->setData(backup);
+            break;
+    }
 }
 
 template <typename E>
@@ -81,6 +154,13 @@ void OrderedBinaryTree<E>::displayTree() {
     else {
         displayTreeHelper(this->root,0);
     }
+    if (this->isFixedSize()) {
+        cout << "Max size: " << this->getMaxSize() << endl;
+    }
+    else {
+        cout << "Max size: no limit" << endl;
+    }
+    cout << "# of items in tree: " << this->getItemCount() << endl;
 }
 
 template <typename E>

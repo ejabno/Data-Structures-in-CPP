@@ -65,10 +65,10 @@ void Node<E>::setRight(Node<E> *newRight) {
 
 template <typename E>
 int Node<E>::getNumChildren() {
-    if (left == NULL && right == NULL) {
+    if (left != NULL && right != NULL) {
         return 2;
     }
-    else if (left == NULL ^ right == NULL) {
+    else if (left != NULL ^ right != NULL) {
         return 1;
     }
     else {

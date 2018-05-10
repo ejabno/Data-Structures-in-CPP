@@ -7,22 +7,16 @@
 //
 
 #include <iostream>
-#include "trees/orderedTree.h"
+#include <time.h>
+
+#include "trees/AVLTree.h"
 
 int main(int argc, const char * argv[]) {
     using namespace std;
-    OrderedBinaryTree<int> *testTree = new OrderedBinaryTree<int>();
-    testTree->displayTree();
+    AVLTree<int> *testAVLTree = new AVLTree<int>();
     
-    cout << "=============================================" << endl;
-    testTree->insert(50);
-    testTree->displayTree();
-    
-    cout << "=============================================" << endl;
-    testTree->insert(15);
-    testTree->displayTree();
-    
-    cout << "=============================================" << endl;
-    testTree->insert(100);
-    testTree->displayTree();
+    testAVLTree->insert(600);
+    testAVLTree->displayTree();
+    testAVLTree->insert(800);
+    testAVLTree->displayTree();
 }

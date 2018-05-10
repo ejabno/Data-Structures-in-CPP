@@ -28,6 +28,7 @@ class Tree {
         bool isFixedSize();
         int getMaxSize();
         int getItemCount();
+        bool contains(E);
 };
 
 template <typename E>
@@ -72,6 +73,26 @@ int Tree<E>::getMaxSize() {
 template <typename E>
 int Tree<E>::getItemCount() {
     return itemCount;
+}
+
+template <typename E>
+bool Tree<E>::contains(E item) {
+    if (isEmpty()) {
+        return false;
+    }
+    
+    Node<E> *cur = root;
+    while (cur != NULL) {
+        E compare = cur->getData();
+        if (compare < item) {
+            cur = cur->getRight();
+        }
+        else if (compare > item) {
+            cur = cur->getLeft();
+        }
+        else return true;
+    }
+    return false;
 }
 
 #endif /* tree_h */
