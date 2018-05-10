@@ -10,7 +10,19 @@
 #include "trees/orderedTree.h"
 
 int main(int argc, const char * argv[]) {
-    {
-        using namespace std;
-    }
+    using namespace std;
+    OrderedBinaryTree<int> *testTree = new OrderedBinaryTree<int>();
+    testTree->displayTree();
+    
+    cout << "=============================================" << endl;
+    testTree->insert(50);
+    testTree->displayTree();
+    
+    cout << "=============================================" << endl;
+    testTree->insert(15);
+    testTree->displayTree();
+    
+    cout << "=============================================" << endl;
+    testTree->insert(100);
+    testTree->displayTree();
 }

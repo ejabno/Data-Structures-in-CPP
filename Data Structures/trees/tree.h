@@ -23,6 +23,7 @@ class Tree {
     public:
         virtual void insert(E) = 0;
         virtual void remove(E) = 0;
+        virtual void displayTree() = 0;
         bool isEmpty();
         bool isFixedSize();
         int getMaxSize();

@@ -12,11 +12,14 @@
 #include "tree.h"
 template<typename E>
 class OrderedBinaryTree: public Tree<E> {
+    protected:
+        void displayTreeHelper(Node<E>*, int);
     public:
         OrderedBinaryTree();
         OrderedBinaryTree(int);
         void insert(E);
         void remove(E);
+        void displayTree();
 };
 
 template <typename E>
@@ -43,15 +46,15 @@ void OrderedBinaryTree<E>::insert(E item) {
         bool insertRight = false;
 
         while (cur != NULL) {
-            E compare = cur->getItem();
+            E compare = cur->getData();
             parent = cur;
             if (item < compare) {
                 cur = cur->getLeft();
-                insertRight = true;
+                insertRight = false;
             }
             else {
                 cur = cur->getRight();
-                insertRight = false;
+                insertRight = true;
             }
         }
         if (insertRight) {
@@ -67,6 +70,30 @@ void OrderedBinaryTree<E>::insert(E item) {
 template <typename E>
 void OrderedBinaryTree<E>::remove(E item) {
 
+}
+
+template <typename E>
+void OrderedBinaryTree<E>::displayTree() {
+    using namespace std;
+    if (this->isEmpty()) {
+        cout << "Tree is empty" << endl;
+    }
+    else {
+        displayTreeHelper(this->root,0);
+    }
+}
+
+template <typename E>
+void OrderedBinaryTree<E>::displayTreeHelper(Node<E> *root, int level) {
+    using namespace std;
+    if (root->getRight() != NULL)
+        displayTreeHelper(root->getRight(), level+1);
+    for (int i = 0; i < level; ++i) {
+        cout << "\t";
+    }
+    cout << root->getData() << endl;
+    if (root->getLeft() != NULL)
+        displayTreeHelper(root->getLeft(), level+1);
 }
 
 #endif /* orderedTree_h */
