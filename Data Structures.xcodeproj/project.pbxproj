@@ -25,6 +25,9 @@
 /* Begin PBXFileReference section */
 		68CBAEAF20A499050050883E /* Data Structures */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Data Structures"; sourceTree = BUILT_PRODUCTS_DIR; };
 		68CBAEB220A499050050883E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		68CBAEBA20A499430050883E /* tree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = tree.h; sourceTree = "<group>"; };
+		68CBAEBB20A4995F0050883E /* node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = node.h; sourceTree = "<group>"; };
+		68CBAEBC20A4C9B90050883E /* orderedTree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = orderedTree.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +60,20 @@
 		68CBAEB120A499050050883E /* Data Structures */ = {
 			isa = PBXGroup;
 			children = (
+				68CBAEB920A499250050883E /* trees */,
 				68CBAEB220A499050050883E /* main.cpp */,
 			);
 			path = "Data Structures";
+			sourceTree = "<group>";
+		};
+		68CBAEB920A499250050883E /* trees */ = {
+			isa = PBXGroup;
+			children = (
+				68CBAEBA20A499430050883E /* tree.h */,
+				68CBAEBB20A4995F0050883E /* node.h */,
+				68CBAEBC20A4C9B90050883E /* orderedTree.h */,
+			);
+			path = trees;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
