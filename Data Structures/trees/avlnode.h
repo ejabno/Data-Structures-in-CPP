@@ -54,13 +54,13 @@ void AVLNode<E>::recalibrateHeight() {
 template <typename E>
 void AVLNode<E>::setLeft(AVLNode<E>* newLeft) {
     this->left = newLeft;
-    recalibrateHeight();
+//    recalibrateHeight();
 }
 
 template <typename E>
 void AVLNode<E>::setRight(AVLNode<E>* newRight) {
     this->right = newRight;
-    recalibrateHeight();
+//    recalibrateHeight();
 }
 
 #endif /* avlnode_h */

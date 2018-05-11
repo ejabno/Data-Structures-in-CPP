@@ -12,12 +12,20 @@
 #include "avlnode.h"
 #include "orderedTree.h"
 
+enum ImbalanceType {LL, LR, RL, RR};
+enum Rotation {LEFT, RIGHT};
+
 template <typename E>
 class AVLTree : public OrderedBinaryTree<E> {
     protected:
-        void insertHelper(E, AVLNode<E>*);
+        AVLNode<E>* insertHelper(E, AVLNode<E>*);
+        void displayTreeHelper(AVLNode<E>*, int);
+        bool isNodeImbalanced(AVLNode<E>*);
+        ImbalanceType getImbalance(AVLNode<E>*);
+        AVLNode<E>* rotateTree(AVLNode<E>*, Rotation);
     public:
         void insert(E);
+        void displayTree();
 };
 
 template <typename E>
@@ -27,13 +35,13 @@ void AVLTree<E>::insert(E item) {
         this->root = newNode;
     }
     else {
-        insertHelper(item, (AVLNode<E>*) this->root);
+        this->root = insertHelper(item, (AVLNode<E>*) this->root);
     }
     ++(this->itemCount);
 }
 
 template <typename E>
-void AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
+AVLNode<E>* AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
     E compare = root->getData();
     if (item >= compare) {
         if (root->getRight() != NULL) {
@@ -54,6 +62,123 @@ void AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
         }
     }
     root->recalibrateHeight();
+    
+    if (isNodeImbalanced(root)) {
+        ImbalanceType imba = getImbalance(root);
+        switch (imba) {
+            case LL:
+                root = rotateTree(root, RIGHT);
+                break;
+            case LR:
+                rotateTree((AVLNode<E>*)root->getLeft(), LEFT);
+                rotateTree(root, RIGHT);
+                break;
+            case RL:
+                rotateTree((AVLNode<E>*)root->getRight(), RIGHT);
+                rotateTree(root, LEFT);
+                break;
+            case RR:
+                rotateTree(root, LEFT);
+                break;
+        }
+    }
+    return root;
+}
+
+template <typename E>
+bool AVLTree<E>::isNodeImbalanced(AVLNode<E> *root) {
+    int leftH = 0;
+    if (root->getLeft() != NULL) leftH = ((AVLNode<E>*)root->getLeft())->getHeight();
+    int rightH = 0;
+    if (root->getRight() != NULL) rightH = ((AVLNode<E>*)root->getRight())->getHeight();
+    int difference = abs(leftH - rightH);
+    if (difference > 1) {
+        return true;
+    }
+    else return false;
+}
+
+template <typename E>
+ImbalanceType AVLTree<E>::getImbalance(AVLNode<E> *root) {
+    if (!isNodeImbalanced(root)) {
+        throw "Function should only be used on imbalanced roots";
+    }
+    int leftHeight = 0;
+    int rightHeight = 0;
+    if (root->getLeft() != NULL) leftHeight = ((AVLNode<E>*)root->getLeft())->getHeight();
+    if (root->getRight() != NULL) rightHeight = ((AVLNode<E>*)root->getRight())->getHeight();
+
+    if (leftHeight > rightHeight) {
+        int leftLeftHeight = 0;
+        int leftRightHeight = 0;
+        if (root->getLeft()->getLeft() != NULL) leftLeftHeight = ((AVLNode<E>*)root->getLeft()->getLeft())->getHeight();
+        if (root->getLeft()->getRight() != NULL) leftRightHeight = ((AVLNode<E>*)root->getLeft()->getRight())->getHeight();
+        if (leftLeftHeight > leftRightHeight)
+            return LL;
+        else return LR;
+    }
+    else {
+        int rightLeftHeight = 0;
+        int rightRightHeight = 0;
+        if (root->getRight()->getLeft() != NULL) rightLeftHeight = ((AVLNode<E>*)root->getRight()->getLeft())->getHeight();
+        if (root->getRight()->getLeft() != NULL) rightRightHeight = ((AVLNode<E>*)root->getRight()->getRight())->getHeight();
+        if (rightLeftHeight > rightRightHeight)
+            return RL;
+        else return RR;
+    }
+}
+
+template <typename E>
+AVLNode<E>* AVLTree<E>::rotateTree(AVLNode<E> *root, Rotation rotate) {
+    switch (rotate) {
+        case LEFT: {
+            AVLNode<E> *newRoot = (AVLNode<E>*) root->getRight();
+            newRoot->setLeft(root);
+            newRoot->setRight((AVLNode<E>*)newRoot->getRight());
+            return NULL;
+        }
+        case RIGHT: {
+            displayTree();
+            AVLNode<E> *newRoot = (AVLNode<E>*) root->getLeft();
+            root->setLeft((AVLNode<E>*)newRoot->getRight());
+            newRoot->setRight(root);
+            return newRoot;
+        }
+    }
+}
+
+template <typename E>
+void AVLTree<E>::displayTree() {
+    using namespace std;
+    if (this->isEmpty()) {
+        OrderedBinaryTree<E>::displayTree();
+        return;
+    }
+    else {
+        displayTreeHelper((AVLNode<E>*) this->root, 0);
+    }
+    if (this->isFixedSize()) {
+        cout << "Max size: " << this->getMaxSize() << endl;
+    }
+    else {
+        cout << "Max size: no limit" << endl;
+    }
+    cout << "# of items in tree: " << this->getItemCount() << endl;
+}
+
+template <typename E>
+void AVLTree<E>::displayTreeHelper(AVLNode<E> *root, int level) {
+    using namespace std;
+    if (root->getRight() != NULL) {
+        displayTreeHelper((AVLNode<E>*)root->getRight(), level + 1);
+    }
+    for (int i = 0; i < level; ++i) {
+        cout << "\t";
+    }
+    cout << root->getData() << "(" << root->getHeight() << ")" << endl;
+    if (root->getLeft() != NULL) {
+        displayTreeHelper((AVLNode<E>*)root->getLeft(), level + 1);
+    }
 }
 
 #endif /* AVLTree_h */
