@@ -14,18 +14,19 @@
 int main(int argc, const char * argv[]) {
     using namespace std;
     AVLTree<int> *testAVLTree = new AVLTree<int>();
-    testAVLTree->displayTree();
-    cout << "==============================" << endl;
-    testAVLTree->insert(1000);
-    testAVLTree->displayTree();
-    cout << "==============================" << endl;
-//    testAVLTree->insert(3000);
-//    testAVLTree->displayTree();
-//    cout << "==============================" << endl;
-    testAVLTree->insert(700);
-    testAVLTree->displayTree();
-    cout << "==============================" << endl;
-    testAVLTree->insert(200);
-    testAVLTree->displayTree();
-    cout << "==============================" << endl;
+    
+    int input;
+    while(true) {
+        cout << "Enter an integer to insert: ";
+        cin >> input;
+        try {
+            testAVLTree->insert(input);
+        }
+        catch (const char *e) {
+            cout << e;
+        }
+        testAVLTree->displayTree();
+        cout << "====================================" << endl;
+    }
 }
+

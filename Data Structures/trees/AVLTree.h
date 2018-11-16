@@ -34,6 +34,9 @@ void AVLTree<E>::insert(E item) {
         AVLNode<E> *newNode = new AVLNode<E>(item);
         this->root = newNode;
     }
+    else if (this->contains(item)) {
+        throw "Inserting duplicate items not allowed\n";
+    }
     else {
         this->root = insertHelper(item, (AVLNode<E>*) this->root);
     }
@@ -45,7 +48,7 @@ AVLNode<E>* AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
     E compare = root->getData();
     if (item >= compare) {
         if (root->getRight() != NULL) {
-            insertHelper(item, (AVLNode<E>*)root->getRight());
+            root->setRight(insertHelper(item, (AVLNode<E>*)root->getRight()));
         }
         else {
             AVLNode<E> *newNode = new AVLNode<E>(item);
@@ -54,7 +57,7 @@ AVLNode<E>* AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
     }
     else {
         if (root->getLeft() != NULL) {
-            insertHelper(item, (AVLNode<E>*)root->getLeft());
+            root->setLeft(insertHelper(item, (AVLNode<E>*)root->getLeft()));
         }
         else {
             AVLNode<E> *newNode = new AVLNode<E>(item);
@@ -70,15 +73,15 @@ AVLNode<E>* AVLTree<E>::insertHelper(E item, AVLNode<E> *root) {
                 root = rotateTree(root, RIGHT);
                 break;
             case LR:
-                rotateTree((AVLNode<E>*)root->getLeft(), LEFT);
-                rotateTree(root, RIGHT);
+                root->setLeft(rotateTree((AVLNode<E>*)root->getLeft(), LEFT));
+                root = rotateTree(root, RIGHT);
                 break;
             case RL:
-                rotateTree((AVLNode<E>*)root->getRight(), RIGHT);
-                rotateTree(root, LEFT);
+                root->setRight(rotateTree((AVLNode<E>*)root->getRight(), RIGHT));
+                root = rotateTree(root, LEFT);
                 break;
             case RR:
-                rotateTree(root, LEFT);
+                root = rotateTree(root, LEFT);
                 break;
         }
     }
@@ -121,7 +124,7 @@ ImbalanceType AVLTree<E>::getImbalance(AVLNode<E> *root) {
         int rightLeftHeight = 0;
         int rightRightHeight = 0;
         if (root->getRight()->getLeft() != NULL) rightLeftHeight = ((AVLNode<E>*)root->getRight()->getLeft())->getHeight();
-        if (root->getRight()->getLeft() != NULL) rightRightHeight = ((AVLNode<E>*)root->getRight()->getRight())->getHeight();
+        if (root->getRight()->getRight() != NULL) rightRightHeight = ((AVLNode<E>*)root->getRight()->getRight())->getHeight();
         if (rightLeftHeight > rightRightHeight)
             return RL;
         else return RR;
@@ -130,21 +133,25 @@ ImbalanceType AVLTree<E>::getImbalance(AVLNode<E> *root) {
 
 template <typename E>
 AVLNode<E>* AVLTree<E>::rotateTree(AVLNode<E> *root, Rotation rotate) {
+    AVLNode<E> *newRoot;
     switch (rotate) {
         case LEFT: {
-            AVLNode<E> *newRoot = (AVLNode<E>*) root->getRight();
+//            displayTree();
+            newRoot = (AVLNode<E>*) root->getRight();
+            root->setRight((AVLNode<E>*)newRoot->getLeft());
             newRoot->setLeft(root);
-            newRoot->setRight((AVLNode<E>*)newRoot->getRight());
-            return NULL;
+            break;
         }
         case RIGHT: {
-            displayTree();
-            AVLNode<E> *newRoot = (AVLNode<E>*) root->getLeft();
+//            displayTree();
+            newRoot = (AVLNode<E>*) root->getLeft();
             root->setLeft((AVLNode<E>*)newRoot->getRight());
             newRoot->setRight(root);
-            return newRoot;
+            break;
         }
     }
+    newRoot->recalibrateHeight();
+    return newRoot;
 }
 
 template <typename E>
